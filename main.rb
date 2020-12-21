@@ -5,10 +5,17 @@ plans = [
   {name: "九州旅行", price: 15000}
 ]
 
+# 定数
+FIRST_PRODUCT_NUM = 1
+LAST_PRODUCT_NUM = (FIRST_PRODUCT_NUM + plans.size) - 1
+DISCOUNT_STANDARD_VALUE = 5
+DISCOUNT_RATE = 0.1
+AFTER_DISCOUNT_RATE = 1 - DISCOUNT_RATE
+
 # 旅行プランを表示
 puts "旅行プランを選択して下さい。"
 puts
-plans.each.with_index(1) { |plan, i|
+plans.each.with_index(FIRST_PRODUCT_NUM) { |plan, i|
   puts "#{i}. #{plan[:name]}(#{plan[:price]})円"
 }
 puts
@@ -17,10 +24,10 @@ puts
 while true
   print "プランの番号を選択 > " 
   select_plan_num = gets.to_i
-  break if (1..3).include?(select_plan_num)
-  puts "1〜3の番号を入力して下さい。"
+  break if (FIRST_PRODUCT_NUM..LAST_PRODUCT_NUM).include?(select_plan_num)
+  puts "#{FIRST_PRODUCT_NUM}〜#{LAST_PRODUCT_NUM}の番号を入力して下さい。"
 end
-chosen_plan = plans[select_plan_num - 1]
+chosen_plan = plans[select_plan_num - FIRST_PRODUCT_NUM]
 
 # 人数を決定
 puts "#{chosen_plan[:name]}ですね。"
@@ -34,8 +41,8 @@ end
 # 合計金額を計算
 puts "#{select_people}名ですね。"
 total_price = chosen_plan[:price] * select_people
-if select_people >= 5
-  puts "5名以上ですので10%割引となります"
-  total_price *= 0.9
+if select_people >= DISCOUNT_STANDARD_VALUE
+  puts "#{DISCOUNT_STANDARD_VALUE}名以上ですので#{(DISCOUNT_RATE*100).floor}%割引となります"
+  total_price *= AFTER_DISCOUNT_RATE
 end
 puts "合計料金は#{total_price.floor}円になります。"
